@@ -8,7 +8,7 @@ import { actionTypes } from "../state/ProductState/actionTypes";
 
 const ProductCard = ({ product }) => {
   const { dispatch } = useDispatch();
-
+  console.log("product__________________", product);
   return (
     <div
       className="shadow-lg rounded-3xl border  p-3 flex flex-col text-indigo-900"
