@@ -1,13 +1,16 @@
 import React from "react";
 import { BiListPlus } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useProducts } from "../context/ProductProvider";
-import { addToCart } from "../redux/actionCreators/productActions";
+import { addToCart, removeFromCart } from "../redux/actionCreators/productActions";
 import { ADD_TO_CART } from "../redux/actionTypes/actionTypes";
 import { actionTypes } from "../state/ProductState/actionTypes";
+import { useLocation } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
-  const { dispatch } = useDispatch();
+  const dispatch = useDispatch();
+  const { pathname } = useLocation()
   console.log("product__________________", product);
   return (
     <div
@@ -27,19 +30,35 @@ const ProductCard = ({ product }) => {
         </ul>
       </div>
       <div className="flex gap-2 mt-5">
-        <button
-          className="bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold"
-          // onClick={() => dispatch(addToCart(product))}
-          onClick={() => dispatch({ type: ADD_TO_CART, payload: product })}
-        >
-          Add to cart
-        </button>
-        <button
-          title="Add to wishlist"
-          className="bg-indigo-500  py-1 px-2 rounded-full"
-        >
-          <BiListPlus className="text-white" />
-        </button>
+        {
+          pathname.includes("cart") &&
+          (
+            <button
+              className="bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold"
+              onClick={() => dispatch(removeFromCart(product))}
+            >
+              <MdDeleteForever />
+            </button>
+          )
+        }
+        {
+          !pathname.includes("cart") &&
+          <button
+            className="bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold"
+            onClick={() => dispatch(addToCart(product))}
+          >
+            Add to cart
+          </button>
+        }
+        {
+          !pathname.includes("cart") &&
+          <button
+            title="Add to wishlist"
+            className="bg-indigo-500  py-1 px-2 rounded-full"
+          >
+            <BiListPlus className="text-white" />
+          </button>
+        }
       </div>
     </div>
   );
